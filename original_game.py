@@ -25,7 +25,7 @@ def check_bound(obj,map_lst:list,mv):
     else:
         return obj.x,obj.y
 
-
+#ssss
 class Player():
     def __init__(self):
         self.x = 3
