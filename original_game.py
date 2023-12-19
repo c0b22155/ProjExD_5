@@ -47,15 +47,20 @@ class Bomb(pg.sprite.Sprite):
     """
     def __init__(self,player):
         super().__init__()
+<<<<<<< HEAD
         self.x = player.x
         self.y = player.y
         self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/bomb.png"), 0, 0.05)
+=======
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/bomb.png"), 0, 1)
+>>>>>>> 0526f60982fd87b203e49f634a22d60d22175f09
         self.rect = self.img.get_rect()
         self.rect.center = (self.x * SQ_SIDE, self.y * SQ_SIDE)
         self.timer = 0
         self.explosions = []
         self.power = 0
 
+<<<<<<< HEAD
     def update(self, screen: pg.Surface):
         self.timer += 1
         if self.timer >= 180:
@@ -71,10 +76,23 @@ class Bomb(pg.sprite.Sprite):
             return explosions
         return []
 
+=======
+
+    def update(self, screen: pg.Surface):
+        self.timer += 1
+        if self.timer >= 180:  
+            self.explode(screen)
+        screen.blit(self.img, self.rect.center)
+
+    def explode(self, screen: pg.Surface):
+        self.explosions.append(Explosion(self.x, self.y))
+        self.kill()
+>>>>>>> 0526f60982fd87b203e49f634a22d60d22175f09
 
 class Explosion(pg.sprite.Sprite):
     """
     爆弾の四方に爆発が起こるようにする。
+<<<<<<< HEAD
     """
     def __init__(self, x, y, obj):
         super().__init__()
@@ -91,6 +109,24 @@ class Explosion(pg.sprite.Sprite):
         if self.timer >= self.duration: 
             self.kill()
             self.timer = 0
+=======
+
+    """
+    def __init__(self, x, y, obj: Bomb):
+        super().__init__()
+        self.x = x
+        self.y = y
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/explosion.gif"), 0, 2.5)
+        self.rect = self.img.get_rect()
+        self.rect.center = (self.x * SQ_SIDE, self.y * SQ_SIDE)
+        self.timer = 0
+
+                
+    def update(self, screen: pg.Surface):
+        self.timer += 1
+        if self.timer >= 1000: 
+            self.kill()
+>>>>>>> 0526f60982fd87b203e49f634a22d60d22175f09
         screen.blit(self.img, self.rect.center)
 
 
@@ -140,11 +176,15 @@ def main():
         
         for bomb in bombs:  # 爆弾をイテレート
             bomb.update(screen)
+<<<<<<< HEAD
             if bomb.timer >= 180:
                 explosion = bomb.explode(screen)
                 if explosion:
                     explosions.add(explosion)
                     
+=======
+
+>>>>>>> 0526f60982fd87b203e49f634a22d60d22175f09
         for explosion in explosions:  # 爆発をイテレート
             explosion.update(screen)
             
