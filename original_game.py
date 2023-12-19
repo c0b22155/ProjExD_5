@@ -26,6 +26,7 @@ def check_bound(obj,map_lst:list,mv):
         return obj.x,obj.y
 
 
+
 class Player():
     def __init__(self):
         self.x = 3
