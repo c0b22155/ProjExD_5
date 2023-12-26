@@ -32,9 +32,6 @@ def check_bound(obj,map_lst:list,mv):
 #         self.y = 11
 #         self.power = 2
 
-    
-
-
 def judgement(bomb, map_lst:list):
     """
     bomb:爆弾
@@ -72,13 +69,43 @@ def judgement(bomb, map_lst:list):
     
 
 class Player():
+
+    # hyper_life = 0  # 発動時間
+    # hyper_count = 1 # 発動回数
+
     def __init__(self,x,y):
         self.x = x
         self.y = y
+        self.hyper_count = 1
+        self.hyper_life = 0
         self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
         
+    
+    def invincible(self, state: str, screen: pg.Surface):
+        """
+        コウカトンを無敵状態にする
+        """
+        if state == "hyper" and self.hyper_life > 0:
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+            self.img = pg.transform.laplacian(self.img)
+            screen.blit(self.img, self.rect)
+
+
+        # if state == "normal":
+        #     self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+        #     screen.blit(self.img, self.rect)
+            
+    def invi_time(self):
+        """
+        hyper_lifeを管理する関数
+        """
+        if self.hyper_life > 0 and self.hyper_life != 0:
+            self.hyper_life -= 1
+
+        if self.hyper_life <= 0:
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
     
     def update(self,mv,screen: pg.Surface,map_lst):
         self.x,self.y = check_bound(self,map_lst,mv)
@@ -200,6 +227,18 @@ def main():
                     mv2[0] += 1
                 if event.key == pg.K_LEFT:
                     mv2[0] -= 1
+
+                if event.key == pg.K_p and player2.hyper_count > 0:
+                    player2.hyper_life = 500
+                    if player2.hyper_life > 0:
+                        player2.invincible("hyper", screen)
+                        player2.hyper_count -= 1
+
+                if event.key == pg.K_e and player.hyper_count > 0:
+                    player.hyper_life = 500
+                    if player.hyper_life > 0:
+                        player.invincible("hyper", screen)
+                        player.hyper_count -= 1
                     
                 if event.key== pg.K_LSHIFT:  # 左シフトキーが押されたかチェック
                     new_bomb = Bomb(player)
@@ -218,8 +257,25 @@ def main():
         for explosion in explosions:  # 爆発をイテレート
             explosion.update(screen)
             
-        pg.display.update()
+        # pg.display.update()
         
+        
+        player.invi_time()
+        player2.invi_time()
+        pg.display.update()
+        #print(Player.hyper_life)
+        pass
+    # score = Score()
+    # bird = Bird(3, (900, 400))
+    # bombs = pg.sprite.Group()
+    # beams = pg.sprite.Group()
+    # shield = pg.sprite.Group()
+    # exps = pg.sprite.Group()
+    # emys = pg.sprite.Group()
+    # gravitys = pg.sprite.Group()
+    # num = 3
+    # tmr = 0
+    # clock = pg.time.Clock()
 
 
 if __name__ == "__main__":
