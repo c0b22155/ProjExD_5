@@ -109,7 +109,7 @@ class Player(pg.sprite.Sprite):
         self.hyper_count = 1 # 発動回数 
         self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.info = self.font.render(f"MAX:{self.bomb_max},POW:{self.bomb_power}", 0, "blue")
-        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
         
@@ -119,7 +119,7 @@ class Player(pg.sprite.Sprite):
         コウカトンを無敵状態にする
         """
         if state == "hyper" and self.hyper_life > 0:
-            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
             self.img = pg.transform.laplacian(self.img)
             screen.blit(self.img, self.rect)
 
@@ -132,7 +132,7 @@ class Player(pg.sprite.Sprite):
             self.hyper_life -= 1
 
         if self.hyper_life <= 0:
-            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
     
     def update(self,mv:list[int,int],screen: pg.Surface,map_lst:list):
         """
@@ -164,7 +164,7 @@ class Item(pg.sprite.Sprite):
         self.x = x
         self.y = y
         self.type = random.choice(__class__.item_types)  # アイテムの効果決定
-        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/{self.type}.png"), 0, 2.5)
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/{self.type}.png"), 0, 0.5)
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
 
@@ -249,8 +249,8 @@ def main():
     players = [Player(P_1,"p1"),Player(P_2,"p2")]
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load(f"{MAIN_DIR}/fig/pg_bg.jpg")
-    wall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/wall.png"),0, 2.5)
-    dwall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/damaged_wall.png"),0, 2.5)
+    wall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/wall.png"),0, 0.5)
+    dwall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/damaged_wall.png"),0, 0.5)
     map_lst = [[0 for i in range(17)] for j in range(26)]
     bombs = pg.sprite.Group()  # 爆弾インスタンスのリスト
     explosions = pg.sprite.Group()  # 爆発インスタンスのリスト
