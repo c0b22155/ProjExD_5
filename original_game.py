@@ -28,7 +28,8 @@ def check_bound(obj,map_lst:list,mv):
         return obj.x+mv[0],obj.y+mv[1]
     else:
         return obj.x,obj.y
-
+    
+    
 
 def judgement(bomb, map_lst:list):
     """
@@ -112,6 +113,7 @@ class Player(pg.sprite.Sprite):
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
         
+
     def invincible(self, state: str, screen: pg.Surface):
         """
         コウカトンを無敵状態にする
@@ -120,6 +122,7 @@ class Player(pg.sprite.Sprite):
             self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
             self.img = pg.transform.laplacian(self.img)
             screen.blit(self.img, self.rect)
+
 
     def invi_time(self):
         """
@@ -230,6 +233,7 @@ class Explosion(pg.sprite.Sprite):
         self.timer = 0
         self.duration = 60
                 
+
     def update(self, screen: pg.Surface,map_lst:list):
         self.timer += 1
         map_lst[self.x][self.y] = 4
@@ -274,7 +278,7 @@ def main():
             # 壊れる壁配置
             if map_lst[x][y] == 2:
                 screen.blit(dwall_image,(x*SQ_SIDE,y*SQ_SIDE))
-                
+
     while True:
         screen.blit(bg_img, [0, 0])
         # 壁描画
@@ -285,6 +289,7 @@ def main():
                 # 壊れる壁配置
                 if map_lst[x][y] == 2:
                     screen.blit(dwall_image,(x*SQ_SIDE,y*SQ_SIDE))
+
         key_lst = pg.key.get_pressed()
         mv1 = [0,0]
         mv2 = [0,0]
