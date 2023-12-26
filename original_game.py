@@ -330,7 +330,7 @@ def main():
                             player.bomb_cnt += 1
                             bombs.add(new_bomb)
                         if event.key == pg.K_i and player.hyper_count > 0:
-                            player.hyper_life = 10000
+                            player.hyper_life = 100
                             if player.hyper_life > 0:
                                 player.invincible("hyper", screen)
                             player.hyper_count -= 1
