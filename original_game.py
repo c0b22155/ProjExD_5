@@ -1,10 +1,10 @@
 import math
 import os
+import pygame as pg
 import random
 import sys
 import time
 from typing import Any
-import pygame as pg
 
 WIDTH = 1000  # ゲームウィンドウの幅 25マス
 HEIGHT = 680  # ゲームウィンドウの高さ 17マス
@@ -30,7 +30,6 @@ def check_bound(obj,map_lst:list,mv):
         return obj.x,obj.y
     
     
-
 def judgement(bomb, map_lst:list):
     """
     bomb:爆弾
@@ -47,7 +46,7 @@ def judgement(bomb, map_lst:list):
             break
         elif map_lst[bomb.x][bomb.y - i] == 2:  # blockと接触したら
             map_lst[bomb.x][bomb.y - i] = 0    #blockを消す
-            if bound > 0.5:
+            if bound > 0.5:  # アイテムを出す
                 newitem.append(Item(bomb.x,bomb.y-i))
             exps.append(Explosion(bomb.x,bomb.y-i))
             break
@@ -109,20 +108,18 @@ class Player(pg.sprite.Sprite):
         self.hyper_count = 1 # 発動回数 
         self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.info = self.font.render(f"MAX:{self.bomb_max},POW:{self.bomb_power}", 0, "blue")
-        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
         
-
     def invincible(self, state: str, screen: pg.Surface):
         """
         コウカトンを無敵状態にする
         """
         if state == "hyper" and self.hyper_life > 0:
-            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
             self.img = pg.transform.laplacian(self.img)
             screen.blit(self.img, self.rect)
-
 
     def invi_time(self):
         """
@@ -132,7 +129,7 @@ class Player(pg.sprite.Sprite):
             self.hyper_life -= 1
 
         if self.hyper_life <= 0:
-            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 2.5)
+            self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/player.png"), 0, 0.5)
     
     def update(self,mv:list[int,int],screen: pg.Surface,map_lst:list):
         """
@@ -164,7 +161,7 @@ class Item(pg.sprite.Sprite):
         self.x = x
         self.y = y
         self.type = random.choice(__class__.item_types)  # アイテムの効果決定
-        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/{self.type}.png"), 0, 2.5)
+        self.img = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/{self.type}.png"), 0, 0.5)
         self.rect = self.img.get_rect()
         self.rect.center = (self.x*SQ_SIDE,self.y*SQ_SIDE)
 
@@ -212,7 +209,6 @@ class Bomb(pg.sprite.Sprite):
             self.parent.bomb_cnt -= 1
         screen.blit(self.img, self.rect.center)
 
-        
     def explode(self, screen: pg.Surface,map_lst:list):
         if self.timer >= 180: 
             return judgement(self,map_lst)
@@ -233,7 +229,6 @@ class Explosion(pg.sprite.Sprite):
         self.timer = 0
         self.duration = 60
                 
-
     def update(self, screen: pg.Surface,map_lst:list):
         self.timer += 1
         map_lst[self.x][self.y] = 4
@@ -249,8 +244,8 @@ def main():
     players = [Player(P_1,"p1"),Player(P_2,"p2")]
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load(f"{MAIN_DIR}/fig/pg_bg.jpg")
-    wall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/wall.png"),0, 2.5)
-    dwall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/damaged_wall.png"),0, 2.5)
+    wall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/wall.png"),0, 0.5)
+    dwall_image = pg.transform.rotozoom(pg.image.load(f"{MAIN_DIR}/fig/damaged_wall.png"),0, 0.5)
     map_lst = [[0 for i in range(17)] for j in range(26)]
     bombs = pg.sprite.Group()  # 爆弾インスタンスのリスト
     explosions = pg.sprite.Group()  # 爆発インスタンスのリスト
@@ -263,7 +258,6 @@ def main():
                     if not((players[1].x-1 <= x <= players[1].x+1)and(players[1].y-1 <= y <= players[1].y+1)):
                         map_lst[x][y] = 2
                     
-    
     # 壁設置 
     for x in range(YOKO):
         for y in range(TATE):
@@ -330,12 +324,11 @@ def main():
                             player.bomb_cnt += 1
                             bombs.add(new_bomb)
                         if event.key == pg.K_i and player.hyper_count > 0:
-                            player.hyper_life = 10000
+                            player.hyper_life = 100
                             if player.hyper_life > 0:
                                 player.invincible("hyper", screen)
                             player.hyper_count -= 1
                     
-        
         players[0].invi_time()
         players[0].update(mv1, screen,map_lst)
         players[1].invi_time()
