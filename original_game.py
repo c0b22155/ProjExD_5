@@ -93,17 +93,7 @@ def main():
         player1.update(mv1, screen,map_lst)
         player2.update(mv2, screen,map_lst)
         pg.display.update()
-    # score = Score()
-    # bird = Bird(3, (900, 400))
-    # bombs = pg.sprite.Group()
-    # beams = pg.sprite.Group()
-    # shield = pg.sprite.Group()
-    # exps = pg.sprite.Group()
-    # emys = pg.sprite.Group()
-    # gravitys = pg.sprite.Group()
-    # num = 3
-    # tmr = 0
-    # clock = pg.time.Clock()
+        
 
 
 if __name__ == "__main__":
