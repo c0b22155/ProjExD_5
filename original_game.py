@@ -66,7 +66,7 @@ class Bomb(pg.sprite.Sprite):
     def explode(self, screen: pg.Surface):
         if self.timer >= 180:
             explosions = []
-            for direction in [(0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)]:  # 四方向に爆発エフェクトを生成
+            for direction in [(0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)]:  # 四方向と中央に爆発エフェクトを生成
                 explosions.append(Explosion(self.x + direction[0], self.y + direction[1], self))
             return explosions
         return []
@@ -89,7 +89,7 @@ class Explosion(pg.sprite.Sprite):
     def update(self, screen: pg.Surface):
         self.timer += 1
         if self.timer >= self.duration: 
-            self.kill()
+            self.kill() #爆発エフェクトが時間差で消えるように
             self.timer = 0
         screen.blit(self.img, self.rect.center)
 
